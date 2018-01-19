@@ -1,3 +1,11 @@
+# Eclipse files
+.classpath
+.project
+.settings
+
+# Spring files
+.springBeans
+
 # Compiled class file
 *.class
 
