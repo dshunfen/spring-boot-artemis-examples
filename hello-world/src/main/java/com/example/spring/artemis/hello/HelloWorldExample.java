@@ -1,4 +1,4 @@
-package com.example.spring.artemis.ssl;
+package com.example.spring.artemis.hello;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -7,10 +7,10 @@ import org.springframework.jms.annotation.JmsListener;
 import org.springframework.jms.core.JmsTemplate;
 
 /**
- * A simple JMS Queue example that uses SSL secure transport.
+ * A simple JMS Queue Hello World example.
  */
 @SpringBootApplication
-public class SSLExample {
+public class HelloWorldExample {
 
 	@JmsListener(destination = "exampleQueue")
 	public void messageConsumer(String text) {
@@ -21,7 +21,7 @@ public class SSLExample {
 	public static void main(String[] args) throws Exception {
 
 		// Step 1. Instantiate the Spring Boot context
-		ConfigurableApplicationContext context = SpringApplication.run(SSLExample.class);
+		ConfigurableApplicationContext context = SpringApplication.run(HelloWorldExample.class);
 
 		// Step 2. Create an example text message
 		// Note: Spring will perform the conversion operations behind the scenes
