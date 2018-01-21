@@ -1,14 +1,22 @@
 # Spring Boot Artemis Examples
 
-This is a project hosting Artemis examples using Spring tooling. These are very simple examples loosely based on the provided examples in the Artemis project, in the [examples folder](https://github.com/apache/activemq-artemis/tree/master/examples).
+## Goal of this project
+To create a project that will demonstrate highlighted Artemis (and consequently JMS 2.0) features, in the most simplest form, using Spring (and Sprint Boot) using Spring's provided JMS tooling.
+
+## Description
+These are very simple examples loosely based on the provided examples in the Artemis project, in the [examples folder](https://github.com/apache/activemq-artemis/tree/master/examples).
 
 Instead of using the manual (e.g. plumbing) setup in the examples, the goal of this project is to provided simple and ([Spring](https://projects.spring.io/spring-boot/)) autoconfigured solutions to these examples using Spring.
+
+## Running these examples
+
+Each example can be run using the `mvn verify` command. This is akin to the existing Artemis examples, but in this project using Spring.
+
+Alternatively, one can start the broker manually using `<example folder>/target/serverX/bin/artemis run` and then running the main method in the example class however is desired.
 
 ## Setup
 
 You first first need to clone this project onto their machine using `git clone https://github.com/dshunfen/spring-boot-artemis-examples.git`.
-
-Each example can be run using the `mvn verify` command.
 
 This can be done on the command line itself, with STS, or via another IDE:
 

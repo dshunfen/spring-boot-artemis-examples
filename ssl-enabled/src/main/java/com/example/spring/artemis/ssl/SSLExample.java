@@ -22,18 +22,16 @@ public class SSLExample {
 		// Step 1. Instantiate the Spring Boot context
 		ConfigurableApplicationContext context = SpringApplication.run(SSLExample.class);
 
-		// Step 2. Create an example text message
-		String text = "This is a text message";
-
-		// Step 3. Retrieve the Spring Boot autoconfigured JmsTemplate from the context
+		// Step 2. Retrieve the Spring Boot autoconfigured JmsTemplate from the context
 		JmsTemplate messageProducer = context.getBean(JmsTemplate.class);
 
-		// Step 4. Send the message
+		// Step 3. Create and send an example text message
+		String text = "This is a text message";
 		messageProducer.convertAndSend("exampleQueue", text);
 
 		System.out.println("Sent message: " + text);
 		
-		// Step 5. Wait until we've received the message
+		// Step 4. Wait until we've received the message
 		context.getBean(MessageConsumer.class).getLatch().await();
 
 		// Step 6. Close the context so things get cleaned up properly and the test ends
@@ -42,7 +40,7 @@ public class SSLExample {
 	
 	@Bean
 	public ActiveMQConnectionFactory connectionFactory() {
-		String testUri = "tcp://localhost:5500?sslEnabled=true&amp;trustStorePath=activemq/server0/activemq.example.truststore&amp;trustStorePassword=activemqexample";
+		String testUri = "tcp://localhost:61616";
 		ActiveMQConnectionFactory cf = new ActiveMQConnectionFactory(testUri);
 		return cf;
 	}
