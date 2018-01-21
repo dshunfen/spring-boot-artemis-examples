@@ -31,8 +31,22 @@ under the License.
       <!-- Acceptors -->
       <acceptors>
          <!-- keystores will be found automatically if they are on the classpath -->
-         <acceptor name="tcp">tcp://localhost:61616</acceptor>
+         <acceptor name="netty-acceptor">tcp://localhost:61616</acceptor>
       </acceptors>
+      
+      <!-- Other config -->
+
+      <security-settings>
+         <!--security for example queue-->
+         <security-setting match="exampleQueue">
+            <permission roles="guest" type="createDurableQueue"/>
+            <permission roles="guest" type="deleteDurableQueue"/>
+            <permission roles="guest" type="createNonDurableQueue"/>
+            <permission roles="guest" type="deleteNonDurableQueue"/>
+            <permission roles="guest" type="consume"/>
+            <permission roles="guest" type="send"/>
+         </security-setting>
+      </security-settings>
 
       <addresses>
          <address name="exampleQueue">
