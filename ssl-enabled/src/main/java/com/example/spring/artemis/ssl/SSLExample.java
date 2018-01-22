@@ -40,7 +40,7 @@ public class SSLExample {
 	
 	@Bean
 	public ActiveMQConnectionFactory connectionFactory() {
-		String testUri = "tcp://localhost:61616";
+		String testUri = "tcp://localhost:5500?sslEnabled=true&amp;trustStorePath=activemq/server0/activemq.example.truststore&amp;trustStorePassword=activemqexample";
 		ActiveMQConnectionFactory cf = new ActiveMQConnectionFactory(testUri);
 		return cf;
 	}

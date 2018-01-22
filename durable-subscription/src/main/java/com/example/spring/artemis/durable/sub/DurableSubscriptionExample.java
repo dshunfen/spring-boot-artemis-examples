@@ -17,6 +17,7 @@
 package com.example.spring.artemis.durable.sub;
 
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory;
 import org.apache.activemq.artemis.jms.client.ActiveMQTopic;
@@ -26,7 +27,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.jms.annotation.JmsListener;
 import org.springframework.jms.config.JmsListenerEndpointRegistry;
-import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.core.JmsMessagingTemplate;
 import org.springframework.stereotype.Component;
 
 /**
@@ -34,46 +35,47 @@ import org.springframework.stereotype.Component;
  */
 @SpringBootApplication
 public class DurableSubscriptionExample {
-   
+
 	public static void main(String[] args) throws Exception {
 
 		// Step 1. Instantiate the Spring Boot context
 		ConfigurableApplicationContext context = SpringApplication.run(DurableSubscriptionExample.class);
+		MessageConsumer messageConsumer = context.getBean(MessageConsumer.class);
 
 		// Step 2. Retrieve the Spring Boot autoconfigured JmsTemplate from the context
-		JmsTemplate messageProducer = context.getBean(JmsTemplate.class);
+		JmsMessagingTemplate messageProducer = context.getBean(JmsMessagingTemplate.class);
 
-		// Step 3. Create a topic we'll send to, since the default Destination is a queue 
 		ActiveMQTopic topic = new ActiveMQTopic("exampleTopic");
-		
+
 		// Step 3. Send the message
 		String text = "This is a text message 1";
 		messageProducer.convertAndSend(topic, text);
 
 		System.out.println("Sent message: " + text);
-		
+
 		// Step 4. Wait until we consume the message from the durable subscription
-		MessageConsumer messageConsumer = context.getBean(MessageConsumer.class);
 		messageConsumer.getLatch().await();
 		messageConsumer.reinitializeLatch(1);
 		
 		JmsListenerEndpointRegistry jmsReg = context.getBean(JmsListenerEndpointRegistry.class);
 		jmsReg.stop();
 		
+		TimeUnit.MINUTES.sleep(1);
+
 		// Step 5. Send a second message
 		String text2 = "This is a text message 2";
 		messageProducer.convertAndSend(topic, text2);
 
-		System.out.println("Sent message: " + text);
+		System.out.println("Sent message: " + text2);
 		
 		jmsReg.start();
 		
 		messageConsumer.getLatch().await();
-
+		
 		// Step 7. Close the context so things get cleaned up properly and the test ends
 		context.close();
 	}
-	
+
 	@Bean
 	public ActiveMQConnectionFactory connectionFactory() {
 		String testUri = "tcp://localhost:61616";

@@ -24,9 +24,15 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		
-		<activemq.artemis.version>2.4.0</activemq.artemis.version>
+		<artemis.version>2.4.0</artemis.version>
 		<activemq.basedir>/opt/apache-artemis-2.4.0/</activemq.basedir>
 	</properties>
+	
+	<modules>
+		<module>hello-world</module>
+		<module>ssl-enabled</module>
+		<module>durable-subscription</module>
+	</modules>
 
 	<dependencies>
 		<dependency>
@@ -89,7 +95,7 @@
 				<plugin>
 					<groupId>org.apache.activemq</groupId>
 					<artifactId>artemis-maven-plugin</artifactId>
-					<version>${activemq.artemis.version}</version>
+					<version>${artemis.version}</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>

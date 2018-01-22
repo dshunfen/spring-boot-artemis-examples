@@ -35,18 +35,8 @@ under the License.
       </acceptors>
 
       <!-- Other config -->
-
-      <security-settings>
-         <!--security for example topic-->
-         <security-setting match="exampleTopic">
-            <permission roles="guest" type="createDurableQueue"/>
-            <permission roles="guest" type="deleteDurableQueue"/>
-            <permission roles="guest" type="createNonDurableQueue"/>
-            <permission roles="guest" type="deleteNonDurableQueue"/>
-            <permission roles="guest" type="consume"/>
-            <permission roles="guest" type="send"/>
-         </security-setting>
-      </security-settings>
+      
+      <security-enabled>false</security-enabled>
 
       <addresses>
          <address name="exampleTopic">
