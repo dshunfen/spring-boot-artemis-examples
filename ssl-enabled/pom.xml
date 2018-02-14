@@ -26,6 +26,7 @@
             <artifactId>artemis-maven-plugin</artifactId>
             <executions>
                <execution>
+               	  <phase>test</phase>
                   <id>create</id>
                   <goals>
                      <goal>create</goal>
@@ -35,6 +36,7 @@
                   </configuration>
                </execution>
                <execution>
+               		<phase>test</phase>
                   <id>start</id>
                   <goals>
                      <goal>cli</goal>
@@ -49,6 +51,7 @@
                   </configuration>
                </execution>
                <execution>
+               <phase>test</phase>
                   <id>runClient</id>
                   <goals>
                      <goal>runClient</goal>
@@ -58,6 +61,7 @@
                   </configuration>
                </execution>
                <execution>
+               <phase>test</phase>
                   <id>stop</id>
                   <goals>
                      <goal>cli</goal>

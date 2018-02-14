@@ -17,10 +17,11 @@
 package com.example.spring.artemis.durable.sub;
 
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.TimeUnit;
 
 import org.apache.activemq.artemis.jms.client.ActiveMQConnectionFactory;
 import org.apache.activemq.artemis.jms.client.ActiveMQTopic;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
@@ -35,6 +36,8 @@ import org.springframework.stereotype.Component;
  */
 @SpringBootApplication
 public class DurableSubscriptionExample {
+	
+	public static final Logger LOG = LoggerFactory.getLogger(DurableSubscriptionExample.class); 
 
 	public static void main(String[] args) throws Exception {
 
@@ -51,22 +54,20 @@ public class DurableSubscriptionExample {
 		String text = "This is a text message 1";
 		messageProducer.convertAndSend(topic, text);
 
-		System.out.println("Sent message: " + text);
+		LOG.info("Sent message: " + text);
 
 		// Step 4. Wait until we consume the message from the durable subscription
 		messageConsumer.getLatch().await();
-		messageConsumer.reinitializeLatch(1);
+		messageConsumer.reinitializeLatch(2);
 		
 		JmsListenerEndpointRegistry jmsReg = context.getBean(JmsListenerEndpointRegistry.class);
 		jmsReg.stop();
-		
-		TimeUnit.MINUTES.sleep(1);
 
 		// Step 5. Send a second message
 		String text2 = "This is a text message 2";
 		messageProducer.convertAndSend(topic, text2);
 
-		System.out.println("Sent message: " + text2);
+		LOG.info("Sent message: " + text2);
 		
 		jmsReg.start();
 		
@@ -86,12 +87,19 @@ public class DurableSubscriptionExample {
 	@Component
 	public class MessageConsumer {
 
-		private CountDownLatch latch = new CountDownLatch(1);
+		private CountDownLatch latch = new CountDownLatch(2);
 
 		@JmsListener(destination = "exampleTopic", id = "durable-client", subscription = "subscriber-1")
 		public void messageConsumer(String text) {
 			// Step 7. Receive the message and release waiting latch
-			System.out.println("Received message: " + text);
+			LOG.info("Received message: " + text);
+			latch.countDown();
+		}
+		
+		@JmsListener(destination = "exampleTopic", id = "durable-client2", subscription = "subscriber-2")
+		public void messageConsumer2(String text) {
+			// Step 7. Receive the message and release waiting latch
+			LOG.info("Received message: " + text);
 			latch.countDown();
 		}
 		

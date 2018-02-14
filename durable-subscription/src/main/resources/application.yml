@@ -1,3 +1,7 @@
 spring:
   jms:
     pub-sub-domain: true
+
+logging:
+  level:
+    root: INFO

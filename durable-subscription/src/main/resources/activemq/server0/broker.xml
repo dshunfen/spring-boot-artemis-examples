@@ -20,28 +20,66 @@ under the License.
 <configuration xmlns="urn:activemq" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="urn:activemq /schema/artemis-configuration.xsd">
    <core xmlns="urn:activemq:core">
 
-      <bindings-directory>./data/bindings</bindings-directory>
-
-      <journal-directory>./data/journal</journal-directory>
-
-      <large-messages-directory>./data/largemessages</large-messages-directory>
-
-      <paging-directory>./data/paging</paging-directory>
-
+      <security-enabled>false</security-enabled>
+      
+      <persistence-enabled>false</persistence-enabled>
+	
       <!-- Acceptors -->
-
       <acceptors>
          <acceptor name="netty-acceptor">tcp://localhost:61616</acceptor>
       </acceptors>
-
-      <!-- Other config -->
       
-      <security-enabled>false</security-enabled>
+            <address-settings>
+         <!-- if you define auto-create on certain queues, management has to be auto-create -->
+         <address-setting match="activemq.management#">
+            <dead-letter-address>DLQ</dead-letter-address>
+            <expiry-address>ExpiryQueue</expiry-address>
+            <redelivery-delay>0</redelivery-delay>
+            <!-- with -1 only the global-max-size is in use for limiting -->
+            <max-size-bytes>-1</max-size-bytes>
+            <message-counter-history-day-limit>10</message-counter-history-day-limit>
+            <address-full-policy>PAGE</address-full-policy>
+            <auto-create-queues>true</auto-create-queues>
+            <auto-create-addresses>true</auto-create-addresses>
+            <auto-create-jms-queues>true</auto-create-jms-queues>
+            <auto-create-jms-topics>true</auto-create-jms-topics>
+         </address-setting>
+         <!--default for catch all-->
+         <address-setting match="#">
+            <dead-letter-address>DLQ</dead-letter-address>
+            <expiry-address>ExpiryQueue</expiry-address>
+            <redelivery-delay>0</redelivery-delay>
+            <!-- with -1 only the global-max-size is in use for limiting -->
+            <max-size-bytes>-1</max-size-bytes>
+            <message-counter-history-day-limit>10</message-counter-history-day-limit>
+            <address-full-policy>PAGE</address-full-policy>
+            <auto-create-queues>true</auto-create-queues>
+            <auto-create-addresses>true</auto-create-addresses>
+            <auto-create-jms-queues>true</auto-create-jms-queues>
+            <auto-create-jms-topics>true</auto-create-jms-topics>
+         </address-setting>
+      </address-settings>
 
       <addresses>
-         <address name="exampleTopic">
-            <multicast/>
+		<address name="exampleTopic">
+			<multicast>
+				<!-- configured to be a shared durable subscription queue -->
+				<queue name="q1" max-consumers="10">
+					<durable>true</durable>
+				</queue>
+			</multicast>
+		</address>
+         <address name="DLQ">
+            <anycast>
+               <queue name="DLQ" />
+            </anycast>
          </address>
+         <address name="ExpiryQueue">
+            <anycast>
+               <queue name="ExpiryQueue" />
+            </anycast>
+         </address>
+
       </addresses>
    </core>
 </configuration>
