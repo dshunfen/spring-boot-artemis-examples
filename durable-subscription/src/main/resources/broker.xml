@@ -61,7 +61,7 @@ under the License.
       </address-settings>
 
       <addresses>
-		<address name="exampleTopic">
+		<address name="Oasis.Test.1">
 			<multicast />
 		</address>
          <address name="DLQ">
